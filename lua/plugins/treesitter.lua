@@ -18,6 +18,7 @@ return {
         "vim",
         "yaml",
         "c",
+        "php",
         "c_sharp",
         "cpp",
         "css",
