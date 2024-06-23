@@ -87,11 +87,15 @@ return {
       completion = cmp.config.window.bordered({
         col_offset = -4,
         side_padding = 0,
-        winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:CursorLineBG,Search:None",
-        boreder = "rounded",
+        -- winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:CursorLineBG,Search:None",
+        -- winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
+        border = "rounded",
+        winhighlight = "Normal:CmpNormal",
       }),
       documentation = cmp.config.window.bordered({
-        winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:CursorLineBG,Search:None",
+        -- winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:CursorLineBG,Search:None",
+        -- winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
+        winhighlight = "Normal:CmpNormal",
         border = "rounded",
       }),
     },
