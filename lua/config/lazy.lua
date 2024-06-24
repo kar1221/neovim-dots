@@ -16,12 +16,12 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.lang.typescript" },
     { import = "lazyvim.plugins.extras.lang.svelte" },
     { import = "lazyvim.plugins.extras.lang.vue" },
-    { import = "lazyvim.plugins.extras.coding.codeium" },
     { import = "lazyvim.plugins.extras.linting.eslint" },
     { import = "lazyvim.plugins.extras.test.core" },
     { import = "lazyvim.plugins.extras.coding.luasnip" },
     { import = "lazyvim.plugins.extras.formatting.prettier" },
     { import = "lazyvim.plugins.extras.ui.mini-animate" },
+    { import = "lazyvim.plugins.extras.util.dot" },
     { import = "plugins" },
   },
   defaults = {
@@ -33,7 +33,7 @@ require("lazy").setup({
     version = false, -- always use the latest git commit
     -- version = "*", -- try installing the latest stable version for plugins that support semver
   },
-  install = { colorscheme = { "tokyonight", "habamax" } },
+  install = { colorscheme = {} },
   checker = { enabled = true }, -- automatically check for plugin updates
   performance = {
     rtp = {
