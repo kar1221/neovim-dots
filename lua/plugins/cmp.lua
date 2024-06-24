@@ -1,62 +1,40 @@
-local function has_words_before()
-  local line, col = (unpack or table.unpack)(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-end
-local function is_visible(cmp)
-  return cmp.core.view:visible() or vim.fn.pumvisible() == 1
+local check_backspace = function()
+  local col = vim.fn.col(".") - 1
+  return col == 0 or vim.fn.getline("."):sub(col, col):match("%s")
 end
 
 local cmp = require("cmp")
+local luasnip = require("luasnip")
 
 local mappings = {
-  ["<Up>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
-  ["<Down>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
-  ["<C-P>"] = cmp.mapping(function()
-    if is_visible(cmp) then
-      cmp.select_prev_item()
-    else
-      cmp.complete()
-    end
-  end),
-  ["<C-N>"] = cmp.mapping(function()
-    if is_visible(cmp) then
-      cmp.select_next_item()
-    else
-      cmp.complete()
-    end
-  end),
   ["<C-K>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "c" }),
   ["<C-J>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
-  ["<C-U>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
-  ["<C-D>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
   ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
-  ["<C-Y>"] = cmp.config.disable,
-  ["<C-E>"] = cmp.mapping(cmp.mapping.abort(), { "i", "c" }),
-  ["<CR>"] = cmp.mapping(cmp.mapping.confirm({ select = false }), { "i", "c" }),
   ["<Tab>"] = cmp.mapping(function(fallback)
-    if is_visible(cmp) then
-      cmp.select_next_item()
-    elseif vim.api.nvim_get_mode().mode ~= "c" and vim.snippet and vim.snippet.active({ direction = 1 }) then
-      vim.schedule(function()
-        vim.snippet.jump(1)
-      end)
-    elseif has_words_before() then
-      cmp.complete()
+    if not cmp.visible then
+      return
+    end
+
+    if luasnip.expandable() then
+      luasnip.expand()
+    elseif luasnip.expand_or_jumpable() then
+      luasnip.expand_or_jump()
+    elseif check_backspace() then
+      fallback()
     else
       fallback()
     end
   end, { "i", "s" }),
   ["<S-Tab>"] = cmp.mapping(function(fallback)
-    if is_visible(cmp) then
+    if cmp.visible() then
       cmp.select_prev_item()
-    elseif vim.api.nvim_get_mode().mode ~= "c" and vim.snippet and vim.snippet.active({ direction = -1 }) then
-      vim.schedule(function()
-        vim.snippet.jump(-1)
-      end)
+    elseif luasnip.jumpable(-1) then
+      luasnip.jump(-1)
     else
       fallback()
     end
   end, { "i", "s" }),
+  ["<CR>"] = cmp.mapping.confirm({ select = true }),
 }
 
 return {
@@ -74,27 +52,29 @@ return {
     mapping = mappings,
 
     sources = {
-      { name = "nvim_lsp" },
-      { name = "luasnip" },
-      { name = "buffer" },
-      { name = "path" },
+      { name = "nvim_lsp", priority = 1000 },
+      { name = "luasnip", priority = 800 },
+      { name = "buffer", priority = 100 },
+      { name = "path", priority = 500 },
     },
 
     window = {
-      completion = cmp.config.window.bordered({
+      completion = {
         col_offset = -4,
         side_padding = 0,
         -- winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:CursorLineBG,Search:None",
         -- winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
-        border = "rounded",
+        -- border = "rounded",
+        border = border,
         winhighlight = "Normal:CmpNormal",
-      }),
-      documentation = cmp.config.window.bordered({
+      },
+      documentation = {
         -- winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:CursorLineBG,Search:None",
         -- winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
         winhighlight = "Normal:CmpNormal",
-        border = "rounded",
-      }),
+        -- border = "rounded",
+        border = border,
+      },
     },
 
     formatting = {
