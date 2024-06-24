@@ -13,7 +13,7 @@ return {
     {
       mode = { "n" },
       "<leader>k",
-      "<cmd>Lspsaga peek_type_definition<cr>",
+      "<cmd>Lspsaga peek_definition<cr>",
       desc = "Peek Definition",
     },
   },
