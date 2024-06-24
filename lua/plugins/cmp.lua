@@ -56,6 +56,7 @@ return {
       { name = "luasnip", priority = 800 },
       { name = "buffer", priority = 100 },
       { name = "path", priority = 500 },
+      { name = "nvim_lsp_signature_help" },
     },
 
     window = {
@@ -64,16 +65,14 @@ return {
         side_padding = 0,
         -- winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:CursorLineBG,Search:None",
         -- winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
-        -- border = "rounded",
-        border = border,
+        border = "rounded",
         winhighlight = "Normal:CmpNormal",
       },
       documentation = {
         -- winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:CursorLineBG,Search:None",
         -- winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
         winhighlight = "Normal:CmpNormal",
-        -- border = "rounded",
-        border = border,
+        border = "rounded",
       },
     },
 
